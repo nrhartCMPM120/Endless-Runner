@@ -46,13 +46,12 @@ class Play extends Phaser.Scene {
         }
         this.tim = 0;
         this.gameover = false;
-        this.timer = this.add.text(game.config.width/2, borderUISize + borderPadding*2, this.tim / 1000, scoreConfig).setOrigin(0.5);
+        this.timer = this.add.text(game.config.width/2, borderUISize + borderPadding - 16, this.tim / 1000, scoreConfig).setOrigin(0.5);
 
         if(this.gameover){
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) for Menu', scoreConfig).setOrigin(0.5);
         }
-
     }
 
     update(){
