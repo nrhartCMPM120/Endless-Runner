@@ -1,5 +1,5 @@
-// Rocket prefab
-class Runner extends Phaser.GameObjects.Sprite {
+// Runner prefab
+class Runner extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
 
@@ -12,11 +12,11 @@ class Runner extends Phaser.GameObjects.Sprite {
 
     update() {
         // jump button
-        if (Phaser.Input.Keyboard.JustDown(keyW) && !this.isJumping && !this.isFalling) {
-            this.isJumping = true;
+        if (Phaser.Input.Keyboard.JustDown(keyW)) {
+            this.setVelocityY(-360);
         }
         // if jumping, move up and down
-        if (this.isJumping && this.y > borderUISize*10 - 100) {
+        /*if (this.isJumping && this.y > borderUISize*10 - 100) {
             this.y -= this.moveSpeed;
         }
         if (this.y <= borderUISize*10 - 100) {
@@ -28,7 +28,7 @@ class Runner extends Phaser.GameObjects.Sprite {
         }
         if (this.y == borderUISize*10) {
             this.isFalling = false;
-        }
+        }*/
     }
 
     // reset rocket to "ground"

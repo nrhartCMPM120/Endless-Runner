@@ -1,9 +1,10 @@
 // Spike prefab
-class Spike extends Phaser.GameObjects.Sprite {
+class Spike extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
-        scene.add.existing(this);   // add to existing scene
-        this.moveSpeed = 3;         // pixels per frame
+        scene.add.existing(this);
+        //scene.physics.add.existing(this);   // add to existing scene
+        this.moveSpeed = 4;         // pixels per frame
         this.spawnSpike = false;
     }
     update() {
