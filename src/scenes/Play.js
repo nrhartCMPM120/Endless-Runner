@@ -67,9 +67,12 @@ class Play extends Phaser.Scene {
         if (!this.gameover){ 
             this.tim += 10;
             this.timer.text = parseInt(this.tim / 1000);
-            this.ghost01.update();
+            //this.ghost01.update();
             this.runner01.update();
             this.spike.update();
+            if(Phaser.Math.Between(1, 100000) <= 500){
+                this.spike.reset();
+            }
         }
 
         if(this.checkCollision(this.runner01, this.spike)){
@@ -77,6 +80,7 @@ class Play extends Phaser.Scene {
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', { font: '28px Press Start 2P', fill: '#ff0044'}).setOrigin(0.5);
             this.add.text(game.config.width/2, game.config.height/2 + 32, 'Press (R) for menu', { font: '28px Press Start 2P', fill: '#ff0044' }).setOrigin(0.5);
         }
+        
 
         if(this.checkCollision(this.runner01, this.ghost01)){
             this.gameover = true;

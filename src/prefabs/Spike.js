@@ -4,17 +4,24 @@ class Spike extends Phaser.GameObjects.Sprite {
         super(scene, x, y, texture, frame);
         scene.add.existing(this);   // add to existing scene
         this.moveSpeed = 3;         // pixels per frame
+        this.spawnSpike = false;
     }
     update() {
         // move spike
-        this.x -= this.moveSpeed;
+        if(this.spawnSpike){
+            this.x -= this.moveSpeed;
+        }
         // wrap around from left edge to right edge
         if(this.x <= 0 - this.width) {
-            this.reset();
+            //this.reset();
+            this.spawnSpike = false;
         }
     }
     // position reset
     reset() {
-        this.x = game.config.width;
+        if(!this.spawnSpike){
+            this.x = game.config.width;
+            this.spawnSpike = true;
+        }
     }
 }
