@@ -6,12 +6,16 @@ class Play extends Phaser.Scene {
     preload(){
         this.load.image('ghost', './assets/spaceship.png');
         this.load.image('runner', './assets/runner.png');
-        this.load.image('spike', './assets/spike.png');
+        this.load.image('spike', './assets/zombie1.png');
         this.load.image('background', './assets/nightground.png');
         this.load.image('ghostb','./assets/ghost.png');
         this.load.image('ground','./assets/ground.png');
         this.load.image('clouds', './assets/clouds.png');
         this.load.image('talltrees', './assets/talltrees.png');
+
+        //zombie
+        this.load.image('zombie1', './assets/zombie1.png');
+        this.load.image('zombie2', './assets/zombie2.png');
         
     }
 
@@ -22,9 +26,9 @@ class Play extends Phaser.Scene {
 
         this.ghostb = this.add.tileSprite(0, 0, 640, 480, 'ghostb').setOrigin(0, 0);
 
-        this.clouds = this.add.tileSprite(0, 0, 640, 480, 'clouds').setOrigin(0, 0);
-
         this.talltrees = this.add.tileSprite(0, 0, 640, 480, 'talltrees').setOrigin(0, 0);
+
+        this.clouds = this.add.tileSprite(0, 0, 640, 480, 'clouds').setOrigin(0, 0);
 
         // floor
         //this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
@@ -38,7 +42,19 @@ class Play extends Phaser.Scene {
         // defined keys
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
-        
+
+
+        this.anims.create({
+            key: 'move',
+            frames: [
+                {key: 'zombie1'},
+                {key: 'zombie2', duration: 50}
+            ],
+            frameRate: 4,
+            repeat: -1
+        });
+        this.spike.anims.play('move');
+
         // score
         let scoreConfig = {
             fontFamily: 'Courier',
@@ -61,6 +77,10 @@ class Play extends Phaser.Scene {
     }
 
     update(){
+
+        //animation
+        // this.runner.anims.play("run");
+
 
         if(this.gameover && Phaser.Input.Keyboard.JustDown(keyR)){
             this.scene.start("menuScene");
