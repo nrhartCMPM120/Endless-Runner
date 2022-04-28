@@ -4,7 +4,7 @@ class Play extends Phaser.Scene {
     }
 
     preload(){
-        this.load.image('ghost', './assets/spaceship.png');
+        //this.load.image('ghost', './assets/spaceship.png');
         this.load.image('runner', './assets/runner.png');
         this.load.image('spike', './assets/zombie1.png');
         this.load.image('background', './assets/nightground.png');
@@ -37,7 +37,8 @@ class Play extends Phaser.Scene {
         this.runner = this.physics.add.sprite(100, 300, 'runner');
         this.ghost01 = new GhostCharge(this, game.config.width + borderUISize*6, borderUISize*11, 'ghost', 0).setOrigin(0, 0);
         //added spike
-        this.spike = new Spike(this, game.config.width+300 + borderUISize*6, borderUISize*11, 'spike', 0).setOrigin(0, 0);
+        this.spike = this.physics.add.sprite(700, 368, 'spike').setSize(8, 2, true);
+        this.spike.body.setAllowGravity(false);
 
         // defined keys
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -71,9 +72,9 @@ class Play extends Phaser.Scene {
         this.tim = 0;
         this.gameover = false;
         this.timer = this.add.text(game.config.width/2, borderUISize + borderPadding - 16, this.tim / 1000, scoreConfig).setOrigin(0.5);
-
-        this.physics.add.collider(this.runner, this.ground);
-        //this.physics.add.collider(this.runner, this.spike);
+        this.spawnSpike = false;
+        this.groundcollide = this.physics.add.collider(this.runner, this.ground);
+        this.physics.add.overlap(this.runner, this.spike, this.gameOver, null, this);
     }
 
     update(){
@@ -98,13 +99,15 @@ class Play extends Phaser.Scene {
             }
             this.tim += 10;
             this.timer.text = parseInt(this.tim / 1000);
-            //this.ghost01.update();
-            this.runner.update();
-            this.spike.update();
-            if(Phaser.Math.Between(1, 100000) <= 500){
-                this.spike.reset();
+            // wrap around from left edge to right edge
+            if (this.spike.body.position.x > 640) {
+                this.spike.setVelocityX(0);
+            }
+            if (this.spike.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 50000){
+                this.spike.setVelocityX(-400);
             }
         }
+        this.physics.world.wrap(this.spike, 50);
         //this.physics.add.overlap(this.runner, this.spike, this.gameOver, null, this);
         if(this.checkCollision(this.runner, this.spike)){
             this.gameover = true;
@@ -123,11 +126,12 @@ class Play extends Phaser.Scene {
 
     }
 
-    /*gameOver() {
-        this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) for Menu', scoreConfig).setOrigin(0.5);
+    gameOver() {
         this.gameover = true;
-    }*/
+        this.physics.world.removeCollider(this.groundcollide);
+        this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', { font: '28px Press Start 2P', fill: '#ff0044'}).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 32, 'Press (R) for menu', { font: '28px Press Start 2P', fill: '#ff0044' }).setOrigin(0.5);
+    }
 
     checkCollision(runner, obstacle){
         if(runner.x < obstacle.x + obstacle.width && 
