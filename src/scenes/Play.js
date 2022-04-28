@@ -37,7 +37,7 @@ class Play extends Phaser.Scene {
         this.runner = this.physics.add.sprite(100, 300, 'runner');
         this.ghost01 = new GhostCharge(this, game.config.width + borderUISize*6, borderUISize*11, 'ghost', 0).setOrigin(0, 0);
         //added spike
-        this.spike = this.physics.add.sprite(700, 368, 'spike').setSize(8, 2, true);
+        this.spike = this.physics.add.sprite(700, 368, 'spike');
         this.spike.body.setAllowGravity(false);
 
         // defined keys
@@ -105,44 +105,17 @@ class Play extends Phaser.Scene {
                 this.spike.setVelocityX(0);
                 this.spike.setX(700);
             }
-            if (this.spike.body.position.x > 640 && Phaser.Math.Between(1, 100) <= 5){
+            if (this.spike.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 400){
                 this.spike.setVelocityX(-400);
             }
         }
-        //this.physics.world.wrap(this.spike, 50);
-        //this.physics.add.overlap(this.runner, this.spike, this.gameOver, null, this);
-        if(this.checkCollision(this.runner, this.spike)){
-            this.gameover = true;
-            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', { font: '28px Press Start 2P', fill: '#ff0044'}).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 32, 'Press (R) for menu', { font: '28px Press Start 2P', fill: '#ff0044' }).setOrigin(0.5);
-        }
-        
-
-        if(this.checkCollision(this.runner, this.ghost01)){
-            this.gameover = true;
-            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', { font: '28px Press Start 2P', fill: '#ff0044'}).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 32, 'Press (R) for menu', { font: '28px Press Start 2P', fill: '#ff0044' }).setOrigin(0.5);
-        }
-
-
-
     }
 
     gameOver() {
         this.gameover = true;
         this.physics.world.removeCollider(this.groundcollide);
+        this.runner.setVelocityY(-300);
         this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', { font: '28px Press Start 2P', fill: '#ff0044'}).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2 + 32, 'Press (R) for menu', { font: '28px Press Start 2P', fill: '#ff0044' }).setOrigin(0.5);
-    }
-
-    checkCollision(runner, obstacle){
-        if(runner.x < obstacle.x + obstacle.width && 
-            runner.x + runner.width > obstacle.x &&
-            runner.y < obstacle.y + obstacle.height &&
-            runner.height + runner.y > obstacle.y){
-                return true;
-        }else{
-                return false;
-        }
     }
 }
