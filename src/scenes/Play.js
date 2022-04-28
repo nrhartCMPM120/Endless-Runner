@@ -71,6 +71,7 @@ class Play extends Phaser.Scene {
         }
         this.tim = 0;
         this.gameover = false;
+        this.loop = false;
         this.timer = this.add.text(game.config.width/2, borderUISize + borderPadding - 16, this.tim / 1000, scoreConfig).setOrigin(0.5);
         this.spawnSpike = false;
         this.groundcollide = this.physics.add.collider(this.runner, this.ground);
@@ -100,11 +101,13 @@ class Play extends Phaser.Scene {
             this.tim += 10;
             this.timer.text = parseInt(this.tim / 1000);
             // wrap around from left edge to right edge
-            if (this.spike.body.position.x > 640) {
+            if (this.spike.body.position.x > 640 && this.loop) {
                 this.spike.setVelocityX(0);
+                this.loop = false;
             }
-            if (this.spike.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 50000){
+            if (!this.loop && this.spike.body.position.x > 640 && Phaser.Math.Between(1, 100) <= 5){
                 this.spike.setVelocityX(-400);
+                this.loop = true;
             }
         }
         this.physics.world.wrap(this.spike, 50);
