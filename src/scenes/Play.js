@@ -101,16 +101,15 @@ class Play extends Phaser.Scene {
             this.tim += 10;
             this.timer.text = parseInt(this.tim / 1000);
             // wrap around from left edge to right edge
-            if (this.spike.body.position.x > 640 && this.loop) {
+            if (this.spike.body.position.x < -50) {
                 this.spike.setVelocityX(0);
-                this.loop = false;
+                this.spike.setX(700);
             }
-            if (!this.loop && this.spike.body.position.x > 640 && Phaser.Math.Between(1, 100) <= 5){
+            if (this.spike.body.position.x > 640 && Phaser.Math.Between(1, 100) <= 5){
                 this.spike.setVelocityX(-400);
-                this.loop = true;
             }
         }
-        this.physics.world.wrap(this.spike, 50);
+        //this.physics.world.wrap(this.spike, 50);
         //this.physics.add.overlap(this.runner, this.spike, this.gameOver, null, this);
         if(this.checkCollision(this.runner, this.spike)){
             this.gameover = true;
