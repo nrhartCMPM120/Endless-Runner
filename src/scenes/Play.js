@@ -5,7 +5,7 @@ class Play extends Phaser.Scene {
 
     preload(){
         //this.load.image('ghost', './assets/spaceship.png');
-        this.load.image('runner', './assets/runner.png');
+        //this.load.image('runner', './assets/runner.png');
         this.load.image('spike', './assets/zombie1.png');
         this.load.image('background', './assets/nightground.png');
         this.load.image('ghostb','./assets/ghost.png');
@@ -14,8 +14,9 @@ class Play extends Phaser.Scene {
         this.load.image('talltrees', './assets/talltrees.png');
 
         //zombie
-        this.load.image('zombie1', './assets/zombie1.png');
-        this.load.image('zombie2', './assets/zombie2.png');
+        this.load.spritesheet('zombie', './assets/tomb.png', {frameWidth: 48, frameHeight: 28});
+        //runner
+        this.load.spritesheet('runner', './assets/runnerspritesheet.png', {frameWidth: 32, frameHeight: 64});
         
     }
 
@@ -45,16 +46,33 @@ class Play extends Phaser.Scene {
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
 
+        // this.anims.create({
+        //     key: 'move',
+        //     frames: [
+        //         {key: 'zombie1'},
+        //         {key: 'zombie2', duration: 50}
+        //     ],
+        //     frameRate: 4,
+        //     repeat: -1
+        // });
+        // this.spike.anims.play('move');
+
         this.anims.create({
             key: 'move',
-            frames: [
-                {key: 'zombie1'},
-                {key: 'zombie2', duration: 50}
-            ],
+            frames: this.anims.generateFrameNumbers('zombie', {start: 0, end: 1, first: 0}),
             frameRate: 4,
             repeat: -1
         });
         this.spike.anims.play('move');
+
+        this.anims.create({
+            key: 'run',
+            frames: this.anims.generateFrameNumbers('runner', {start: 0, end: 5, first: 0}),
+            frameRate: 16,
+            repeat: -1
+        });
+        this.runner.anims.play('run');
+
 
         // score
         let scoreConfig = {
@@ -81,7 +99,7 @@ class Play extends Phaser.Scene {
     update(){
 
         //animation
-        // this.runner.anims.play("run");
+        //this.spike.anims.play("move");
 
 
         if(this.gameover && Phaser.Input.Keyboard.JustDown(keyR)){
