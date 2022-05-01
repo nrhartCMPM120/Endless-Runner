@@ -71,7 +71,7 @@ class Play extends Phaser.Scene {
             frameRate: 16,
             repeat: -1
         });
-        this.runner.anims.play('run');
+        //this.runner.anims.play('run');
 
 
         // score
@@ -120,7 +120,9 @@ class Play extends Phaser.Scene {
             this.clouds.tilePositionX += 2;
             if (Phaser.Input.Keyboard.JustDown(keyW) && this.runner.body.touching.down) {
                 this.runner.setVelocityY(-360);
+                this.runner.anims.stop('run');
             }
+            if (this.runner.body.position.y < 300) this.runner.anims.play('run');
             if (this.iframe == true) {
                 this.iframetime += 10;
                 if (this.runner.alpha == 0) this.runner.alpha = 100;
