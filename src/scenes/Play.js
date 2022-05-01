@@ -87,13 +87,16 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 100
         }
+        this.hp = 3;                                    //Total Lives of runner {default: 3}
+        this.iframe = false;
         this.tim = 0;
         this.gameover = false;
         this.loop = false;
         this.timer = this.add.text(game.config.width/2, borderUISize + borderPadding - 16, this.tim / 1000, scoreConfig).setOrigin(0.5);
         this.spawnSpike = false;
         this.groundcollide = this.physics.add.collider(this.runner, this.ground);
-        this.physics.add.overlap(this.runner, this.spike, this.gameOver, null, this);
+        this.physics.add.overlap(this.runner, this.spike, this.hit, null, this);
+        this.lives = this.add.text(70, borderUISize + borderPadding - 16, this.iframe, scoreConfig).setOrigin(0.5);
     }
 
     update(){
@@ -109,12 +112,23 @@ class Play extends Phaser.Scene {
         //move background
         //this.background.tilePositionX += 4; 
         //this.ghostb.tilePositionX += 2;
-        this.talltrees.tilePositionX += 3;
-        this.clouds.tilePositionX += 2;
+        
 
-        if (!this.gameover){ 
+        if (!this.gameover){
+            this.lives.text = this.hp;
+            this.talltrees.tilePositionX += 3;
+            this.clouds.tilePositionX += 2;
             if (Phaser.Input.Keyboard.JustDown(keyW) && this.runner.body.touching.down) {
                 this.runner.setVelocityY(-360);
+            }
+            if (this.iframe == true) {
+                this.iframetime += 10;
+                if (this.runner.alpha == 0) this.runner.alpha = 100;
+                else this.runner.alpha = 0;
+                if (this.iframetime >= 1000) {                      //invincibility time {default: 1000} (1 second)
+                    this.iframe = false;
+                    this.runner.alpha = 100;
+                }
             }
             this.tim += 10;
             this.timer.text = parseInt(this.tim / 1000);
@@ -129,11 +143,22 @@ class Play extends Phaser.Scene {
         }
     }
 
-    gameOver() {
-        this.gameover = true;
-        this.physics.world.removeCollider(this.groundcollide);
-        this.runner.setVelocityY(-300);
-        this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', { font: '28px Press Start 2P', fill: '#ff0044'}).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2 + 32, 'Press (R) for menu', { font: '28px Press Start 2P', fill: '#ff0044' }).setOrigin(0.5);
+    hit() {
+        if (this.iframe == false) {
+            this.hp -= 1;
+            if (this.hp == 0) {
+                this.lives.text = this.hp;
+                this.gameover = true;
+                this.runner.anims.stop('run');
+                this.physics.world.removeCollider(this.groundcollide);
+                this.runner.setVelocityY(-300);
+                this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', { font: '28px Press Start 2P', fill: '#ff0044'}).setOrigin(0.5);
+                this.add.text(game.config.width/2, game.config.height/2 + 32, 'Press (R) for menu', { font: '28px Press Start 2P', fill: '#ff0044' }).setOrigin(0.5);
+            }
+            else {
+                this.iframe = true;
+                this.iframetime = 0;
+            }
+        }
     }
 }
