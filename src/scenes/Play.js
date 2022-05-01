@@ -11,6 +11,7 @@ class Play extends Phaser.Scene {
         this.load.image('ghostb','./assets/ghost.png');
         this.load.image('ground','./assets/ground.png');
         this.load.image('clouds', './assets/clouds.png');
+        this.load.audio('jump', './assets/jumpsfx.wav');
         this.load.image('talltrees', './assets/talltrees.png');
 
         //zombie
@@ -121,6 +122,7 @@ class Play extends Phaser.Scene {
             if (Phaser.Input.Keyboard.JustDown(keyW) && this.runner.body.touching.down) {
                 this.runner.setVelocityY(-360);
                 this.runner.anims.stop('run');
+                this.sound.play('jump');
             }
             if (this.runner.body.position.y < 300) this.runner.anims.play('run');
             if (this.iframe == true) {
