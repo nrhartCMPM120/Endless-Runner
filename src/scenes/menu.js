@@ -3,7 +3,7 @@ class Menu extends Phaser.Scene {
         super("menuScene");
     }
     preload(){
-        this.load.audio('sfx_select', './assets/SFX1.wav');
+        //this.load.audio('sfx_select', './assets/SFX1.wav');
     }
 
     create(){
@@ -28,7 +28,7 @@ class Menu extends Phaser.Scene {
 
     update(){
         if (Phaser.Input.Keyboard.JustDown(keyW)) {
-            this.sound.play('sfx_select');
+            //this.sound.play('sfx_select');
             this.scene.start('playScene');    
           }
     }
