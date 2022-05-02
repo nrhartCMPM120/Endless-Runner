@@ -44,7 +44,7 @@ class Play extends Phaser.Scene {
         this.ghostcharge = this.physics.add.sprite(700, 350, 'ghostcharge');
         this.ghostcharge.body.setAllowGravity(false);
 
-        this.ghostshoot = this.physics.add.sprite(700, 350, 'ghostshoot');
+        this.ghostshoot = this.physics.add.sprite(700, 200, 'ghostshoot');
         this.ghostshoot.body.setAllowGravity(false);
 
         // defined keys
@@ -155,14 +155,17 @@ class Play extends Phaser.Scene {
             }
 
             // if at max hight go down
-            if (this.ghostshoot.body.position.y < 250 && this.isfloating) {
+            if (this.ghostshoot.body.position.y < 230 && this.isfloating) {
                 this.ghostshoot.setVelocityY(50);
+            }
+            if (this.ghostshoot.body.position.y > 300 && this.isfloating) {
                 this.isfloating = false;
             }
-
             // if at min hight go up
-            if (this.ghostshoot.body.position.y > 370 && !this.isfalling) {
+            if (this.ghostshoot.body.position.y > 300 && !this.isfloating) {
                 this.ghostshoot.setVelocityY(-50);
+            }
+            if (this.ghostshoot.body.position.y < 230 && !this.isfloating) {
                 this.isfloating = true;
             }
 
@@ -178,6 +181,10 @@ class Play extends Phaser.Scene {
             if (this.hp == 0) {
                 this.lives.text = this.hp;
                 this.gameover = true;
+                this.ghostcharge.setVelocityX(0);
+                this.tomb.setVelocityX(0);
+                this.ghostshoot.setVelocityX(0);
+                this.ghostshoot.setVelocityY(0);
                 this.runner.anims.stop('run');
                 this.physics.world.removeCollider(this.groundcollide);
                 this.runner.setVelocityY(-300);
