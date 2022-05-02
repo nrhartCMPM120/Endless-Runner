@@ -44,6 +44,9 @@ class Play extends Phaser.Scene {
         this.ghostcharge = this.physics.add.sprite(700, 350, 'ghostcharge');
         this.ghostcharge.body.setAllowGravity(false);
 
+        this.ghostshoot = this.physics.add.sprite(700, 350, 'ghostshoot');
+        this.ghostshoot.body.setAllowGravity(false);
+
         // defined keys
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
@@ -91,6 +94,9 @@ class Play extends Phaser.Scene {
         this.physics.add.overlap(this.runner, this.ghostcharge, this.hit, null, this);
 
         this.lives = this.add.text(70, borderUISize + borderPadding - 16, this.iframe, scoreConfig).setOrigin(0.5);
+
+        // check if ghostshoot is going up
+        this.isfloating = true;
     }
 
     update(){
@@ -139,8 +145,29 @@ class Play extends Phaser.Scene {
                 this.ghostcharge.setVelocityX(0);
                 this.ghostcharge.setX(700);
             }
-            if (this.tomb.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 100){
+            if (this.ghostcharge.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 100){
                 this.ghostcharge.setVelocityX(-400);
+            }
+
+            // ghostshoot spawn and mechanics
+            if (this.ghostshoot.body.position.x < 550) {
+                this.ghostshoot.setVelocityX(0);
+            }
+
+            // if at max hight go down
+            if (this.ghostshoot.body.position.y < 250 && this.isfloating) {
+                this.ghostshoot.setVelocityY(50);
+                this.isfloating = false;
+            }
+
+            // if at min hight go up
+            if (this.ghostshoot.body.position.y > 370 && !this.isfalling) {
+                this.ghostshoot.setVelocityY(-50);
+                this.isfloating = true;
+            }
+
+            if (this.ghostshoot.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 400){
+                this.ghostshoot.setVelocityX(-200);
             }
         }
     }
