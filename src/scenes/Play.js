@@ -186,6 +186,7 @@ class Play extends Phaser.Scene {
                 this.ghostshoot.setVelocityX(0);
                 this.ghostshoot.setVelocityY(0);
                 this.runner.anims.stop('run');
+                this.runner.anims.stop('move');
                 this.physics.world.removeCollider(this.groundcollide);
                 this.runner.setVelocityY(-300);
                 this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', { font: '28px Press Start 2P', fill: '#ff0044'}).setOrigin(0.5);
