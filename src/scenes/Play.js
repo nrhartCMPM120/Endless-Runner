@@ -4,18 +4,17 @@ class Play extends Phaser.Scene {
     }
 
     preload(){
-        //this.load.image('ghost', './assets/spaceship.png');
-        //this.load.image('runner', './assets/runner.png');
-        this.load.image('spike', './assets/zombie1.png');
         this.load.image('background', './assets/nightground.png');
         this.load.image('ghostb','./assets/ghost.png');
         this.load.image('ground','./assets/ground.png');
         this.load.image('clouds', './assets/clouds.png');
         this.load.audio('jump', './assets/jumpsfx.wav');
         this.load.image('talltrees', './assets/talltrees.png');
+        this.load.image('ghostcharge', './assets/ghostenemy.png');
+        this.load.image('ghostshoot', './assets/ghostenemy.png');
 
-        //zombie
-        this.load.spritesheet('zombie', './assets/tomb.png', {frameWidth: 48, frameHeight: 28});
+        //tomb
+        this.load.spritesheet('tomb', './assets/tomb.png', {frameWidth: 48, frameHeight: 28});
         //runner
         this.load.spritesheet('runner', './assets/runnerspritesheet.png', {frameWidth: 32, frameHeight: 64});
         
@@ -37,42 +36,32 @@ class Play extends Phaser.Scene {
         this.ground = this.physics.add.staticImage(400, 495, 'ground').setScale(2).refreshBody();
         
         this.runner = this.physics.add.sprite(100, 300, 'runner');
-        this.ghost01 = new GhostCharge(this, game.config.width + borderUISize*6, borderUISize*11, 'ghost', 0).setOrigin(0, 0);
-        //added spike
-        this.spike = this.physics.add.sprite(700, 368, 'spike');
-        this.spike.body.setAllowGravity(false);
+        
+        //added tomb
+        this.tomb = this.physics.add.sprite(700, 368, 'tomb');
+        this.tomb.body.setAllowGravity(false);
+
+        this.ghostcharge = this.physics.add.sprite(700, 350, 'ghostcharge');
+        this.ghostcharge.body.setAllowGravity(false);
 
         // defined keys
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
-
-        // this.anims.create({
-        //     key: 'move',
-        //     frames: [
-        //         {key: 'zombie1'},
-        //         {key: 'zombie2', duration: 50}
-        //     ],
-        //     frameRate: 4,
-        //     repeat: -1
-        // });
-        // this.spike.anims.play('move');
-
         this.anims.create({
             key: 'move',
-            frames: this.anims.generateFrameNumbers('zombie', {start: 0, end: 1, first: 0}),
+            frames: this.anims.generateFrameNumbers('tomb', {start: 0, end: 1, first: 0}),
             frameRate: 4,
             repeat: -1
         });
-        this.spike.anims.play('move');
+        this.tomb.anims.play('move');
 
         this.anims.create({
             key: 'run',
-            frames: this.anims.generateFrameNumbers('runner', {start: 0, end: 5, first: 0}),
+            frames: this.anims.generateFrameNumbers('runner', {start: 0, end: 4, first: 0}),
             frameRate: 16,
             repeat: -1
         });
-        //this.runner.anims.play('run');
 
 
         // score
@@ -94,31 +83,30 @@ class Play extends Phaser.Scene {
         this.gameover = false;
         this.loop = false;
         this.timer = this.add.text(game.config.width/2, borderUISize + borderPadding - 16, this.tim / 1000, scoreConfig).setOrigin(0.5);
-        this.spawnSpike = false;
+        
+        this.spawntomb = false;
         this.groundcollide = this.physics.add.collider(this.runner, this.ground);
-        this.physics.add.overlap(this.runner, this.spike, this.hit, null, this);
+        //this.groundcollide = this.physics.add.collider(this.ghostcharge, this.ground);
+        this.physics.add.overlap(this.runner, this.tomb, this.hit, null, this);
+        this.physics.add.overlap(this.runner, this.ghostcharge, this.hit, null, this);
+
         this.lives = this.add.text(70, borderUISize + borderPadding - 16, this.iframe, scoreConfig).setOrigin(0.5);
     }
 
     update(){
 
-        //animation
-        //this.spike.anims.play("move");
-
-
         if(this.gameover && Phaser.Input.Keyboard.JustDown(keyR)){
             this.scene.start("menuScene");
         }
 
-        //move background
-        //this.background.tilePositionX += 4; 
-        //this.ghostb.tilePositionX += 2;
-        
-
         if (!this.gameover){
             this.lives.text = this.hp;
+
+            // background scroll
             this.talltrees.tilePositionX += 3;
             this.clouds.tilePositionX += 2;
+            this.ghostb.tilePositionX += 0.5;
+
             if (Phaser.Input.Keyboard.JustDown(keyW) && this.runner.body.touching.down) {
                 this.runner.setVelocityY(-360);
                 this.runner.anims.stop('run');
@@ -136,13 +124,23 @@ class Play extends Phaser.Scene {
             }
             this.tim += 10;
             this.timer.text = parseInt(this.tim / 1000);
-            // wrap around from left edge to right edge
-            if (this.spike.body.position.x < -50) {
-                this.spike.setVelocityX(0);
-                this.spike.setX(700);
+
+            // tombstone spawn and mechanics
+            if (this.tomb.body.position.x < -50) {
+                this.tomb.setVelocityX(0);
+                this.tomb.setX(700);
             }
-            if (this.spike.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 400){
-                this.spike.setVelocityX(-400);
+            if (this.tomb.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 400){
+                this.tomb.setVelocityX(-400);
+            }
+
+            // ghostcharge spawn and mechanics
+            if (this.ghostcharge.body.position.x < -50) {
+                this.ghostcharge.setVelocityX(0);
+                this.ghostcharge.setX(700);
+            }
+            if (this.tomb.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 100){
+                this.ghostcharge.setVelocityX(-400);
             }
         }
     }
