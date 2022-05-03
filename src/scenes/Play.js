@@ -13,6 +13,10 @@ class Play extends Phaser.Scene {
         this.load.image('talltrees', './assets/talltrees.png');
         //this.load.image('ghostcharge', './assets/ghostenemy.png');
         this.load.image('ghostshoot', './assets/ghostenemy.png');
+        this.load.audio('hit', './assets/playerdamagesfx.wav');
+        this.load.audio('death', './assets/Playerdeathsfx.wav');
+        this.load.audio('kill', './assets/EnemyDeathsfx.wav');
+        this.load.audio('fire', './assets/shootingsfx.wav');
 
         //tomb
         this.load.spritesheet('tomb', './assets/tomb.png', {frameWidth: 48, frameHeight: 28});
@@ -41,7 +45,7 @@ class Play extends Phaser.Scene {
         
         this.runner = this.physics.add.sprite(100, 300, 'runner');
         
-        //added tomb
+        //added sprites
         this.tomb = this.physics.add.sprite(700, 368, 'tomb');
         this.tomb.body.setAllowGravity(false);
 
@@ -50,6 +54,12 @@ class Play extends Phaser.Scene {
 
         this.ghostshoot = this.physics.add.sprite(700, 400, 'ghostshoot');
         this.ghostshoot.body.setAllowGravity(false);
+
+        this.hpup = this.physics.add.sprite(700, 350, '');
+        this.hpup.body.setAllowGravity(false);
+
+        this.gun = this.physics.add.sprite(700, 350, '');
+        this.gun.body.setAllowGravity(false);
 
         // defined keys
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -96,9 +106,11 @@ class Play extends Phaser.Scene {
         this.hp = 3;                                    //Total Lives of runner {default: 3}
         this.iframe = false;
         this.timecounter = 0;
+        this.scorecounter = 0;
+        this.diff = 0;
         this.gameover = false;
         this.loop = false;
-        this.timer = this.add.text(game.config.width/2, borderUISize + borderPadding - 16, this.timecounter / 1000, scoreConfig).setOrigin(0.5);
+        this.score = this.add.text(game.config.width/2, borderUISize + borderPadding - 16, this.scorecounter / 1000, scoreConfig).setOrigin(0.5);
         
         this.spawntomb = false;
         this.groundcollide = this.physics.add.collider(this.runner, this.ground);
@@ -115,10 +127,13 @@ class Play extends Phaser.Scene {
         this.bulletsghost = this.physics.add.group();
         this.isfiring = true;
         this.ghostfiring = true;
+        this.upgrade = false;
 
         this.physics.add.overlap(this.bullets, this.ghostshoot, this.ghostshootdeath, null, this);
         this.physics.add.overlap(this.bullets, this.ghostcharge, this.ghostchargedeath, null, this);
         this.physics.add.overlap(this.bulletsghost, this.runner, this.hit, null, this);
+        this.physics.add.overlap(this.hpup, this.runner, this.health, null, this);
+        this.physics.add.overlap(this.gun, this.runner, this.guns, null, this);
     }
 
     update(){
@@ -131,10 +146,10 @@ class Play extends Phaser.Scene {
             this.lives.text = this.hp;
 
             // background scroll
-            this.talltrees.tilePositionX += 3;
-            this.clouds.tilePositionX += 2;
-            this.ghostb.tilePositionX += 0.5;
-            this.groundScroll.tilePositionX += 2;
+            this.talltrees.tilePositionX += 3 + this.diff;
+            this.clouds.tilePositionX += 2 + this.diff;
+            this.ghostb.tilePositionX += 0.5 + this.diff;
+            this.groundScroll.tilePositionX += 2 + this.diff;
             
             // jumping
             if (Phaser.Input.Keyboard.JustDown(keyW) && this.runner.body.touching.down) {
@@ -153,7 +168,8 @@ class Play extends Phaser.Scene {
                 }
             }
             this.timecounter += 10;
-            this.timer.text = parseInt(this.timecounter / 1000);
+            this.scorecounter += 10;
+            this.score.text = parseInt(this.scorecounter / 1000);
 
             // tombstone spawn and mechanics
             if (this.tomb.body.position.x < -50) {
@@ -161,7 +177,7 @@ class Play extends Phaser.Scene {
                 this.tomb.setX(700);
             }
             if (this.tomb.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 400){
-                this.tomb.setVelocityX(-400);
+                this.tomb.setVelocityX(-400 - this.diff);
             }
 
             // ghostcharge spawn and mechanics
@@ -170,7 +186,25 @@ class Play extends Phaser.Scene {
                 this.ghostcharge.setX(700);
             }
             if (this.ghostcharge.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 150){
-                this.ghostcharge.setVelocityX(-500);
+                this.ghostcharge.setVelocityX(-500 - this.diff);
+            }
+
+            //HP Power Up spawn
+            if (this.hpup.body.position.x < -50) {
+                this.hpup.setVelocityX(0);
+                this.hpup.setX(700);
+            }
+            if (this.hp < 3 && this.hpup.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 10){
+                this.hpup.setVelocityX(-50);
+            }
+
+            //Gun Power Up spawn
+            if (this.gun.body.position.x < -50) {
+                this.gun.setVelocityX(0);
+                this.gun.setX(700);
+            }
+            if (this.gun.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 100){
+                this.gun.setVelocityX(-50);
             }
 
             // ghostshoot spawn and mechanics
@@ -203,7 +237,7 @@ class Play extends Phaser.Scene {
             }
 
             if(keyF.isDown && this.isfiring){
-                this.isfiring = false;
+                if (thhis.upgrade = false) this.isfiring = false;
                 this.firebullet();
                 this.time.addEvent({ delay: 1500, callback: ()=> {this.isfiring = true; }, callbackScope: this});
             }
@@ -214,6 +248,7 @@ class Play extends Phaser.Scene {
         if (this.iframe == false) {
             this.hp -= 1;
             if (this.hp == 0) {
+                this.sound.play('death');
                 this.lives.text = this.hp;
                 this.gameover = true;
                 this.ghostcharge.setVelocityX(0);
@@ -221,19 +256,23 @@ class Play extends Phaser.Scene {
                 this.ghostshoot.setVelocityX(0);
                 this.ghostshoot.setVelocityY(0);
                 this.runner.anims.stop('run');
-                this.runner.anims.stop('move');
+                this.tomb.anims.stop('move');
+                this.ghostshoot.anims.stop('wiggle');
+                this.ghostcharge.anims.stop('wiggle');
                 this.physics.world.removeCollider(this.groundcollide);
                 this.runner.setVelocityY(-300);
                 this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', { font: '28px Press Start 2P', fill: '#ff0044'}).setOrigin(0.5);
                 this.add.text(game.config.width/2, game.config.height/2 + 32, 'Press (R) for menu', { font: '28px Press Start 2P', fill: '#ff0044' }).setOrigin(0.5);
             }
             else {
+                this.sound.play('hit');
                 this.iframe = true;
                 this.iframetime = 0;
             }
         }
     }
     firebullet(){
+        this.sound.play('fire');
         this.bulletcreate = this.bullets.create(this.runner.x + 15, this.runner.y + 3, 'bullet');
         this.bulletcreate.setScale(2);
         this.bulletcreate.body.setAllowGravity(false);
@@ -242,6 +281,7 @@ class Play extends Phaser.Scene {
     }
 
     ghostbullet(){
+        this.sound.play('fire');
         this.bulletghostcreate = this.bulletsghost.create(this.ghostshoot.x, this.ghostshoot.y, 'bullet');
         this.bulletghostcreate.setScale(2);
         this.bulletghostcreate.body.setAllowGravity(false);
@@ -249,12 +289,29 @@ class Play extends Phaser.Scene {
     }
 
     ghostshootdeath(){
+        this.sound.play('kill');
+        this.scorecounter += 1000;
         this.ghostshoot.setX(700);
         this.bulletcreate.destroy();
     }
 
     ghostchargedeath(){
+        this.sound.play('kill');
+        this.scorecounter += 1000;
         this.ghostcharge.setX(-50);
         this.bulletcreate.destroy();
+    }
+
+    health() {
+        this.hpup.setVelocityX(0);
+        this.hpup.setX(700);
+        this.hp += 1;
+    }
+
+    guns() {
+        this.gun.setVelocityX(0);
+        this.gun.setX(700);
+        this.upgrade = true;
+        this.time.delayedCall(10000, () => {this.upgrade = false}, null, this);
     }
 }

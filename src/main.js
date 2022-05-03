@@ -18,4 +18,4 @@ let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;
 
 // jump, restart, fire keys
-let keyW, keyR, keyF, keySPACE;
+let keyW, keyR, keyF;
