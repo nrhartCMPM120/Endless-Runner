@@ -6,10 +6,10 @@ class Play extends Phaser.Scene {
     preload(){
         this.load.image('background', './assets/nightground.png');
         this.load.image('bullet', './assets/bullet.png');
-        this.load.image('fireball', './assets/.png');
-        this.load.image('hpup', './assets/.png');
-        this.load.image('gun', './assets/.png');
-        this.load.image('HP', './assets/.png');
+        //this.load.image('fireball', './assets/.png');
+        this.load.image('hpup', './assets/heartpowerup.png');
+        this.load.image('gun', './assets/bulletpowerup.png');
+        //this.load.image('HP', './assets/heart.png');
         this.load.image('ghostb','./assets/ghost.png');
         this.load.image('ground','./assets/ground.png');
         this.load.image('clouds', './assets/clouds.png');
@@ -241,7 +241,7 @@ class Play extends Phaser.Scene {
             }
 
             if(keyF.isDown && this.isfiring){
-                if (thhis.upgrade = false) this.isfiring = false;
+                if (this.upgrade = false) this.isfiring = false;
                 this.firebullet();
                 this.time.addEvent({ delay: 1500, callback: ()=> {this.isfiring = true; }, callbackScope: this});
             }
