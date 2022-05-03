@@ -35,6 +35,7 @@ class Play extends Phaser.Scene {
         // floor
         //this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
         this.ground = this.physics.add.staticImage(400, 495, 'ground').setScale(2).refreshBody();
+        this.groundScroll = this.add.tileSprite(0, game.config.height-95, game.config.width, 95, 'ground').setOrigin(0);
         
         this.runner = this.physics.add.sprite(100, 300, 'runner');
         
@@ -101,10 +102,13 @@ class Play extends Phaser.Scene {
         this.isfloating = true;
 
         this.bullets = this.physics.add.group();
+        this.bulletsghost = this.physics.add.group();
         this.isfiring = true;
+        this.ghostfiring = true;
 
         this.physics.add.overlap(this.bullets, this.ghostshoot, this.ghostshootdeath, null, this);
         this.physics.add.overlap(this.bullets, this.ghostcharge, this.ghostchargedeath, null, this);
+        this.physics.add.overlap(this.bulletsghost, this.runner, this.hit, null, this);
     }
 
     update(){
@@ -120,6 +124,7 @@ class Play extends Phaser.Scene {
             this.talltrees.tilePositionX += 3;
             this.clouds.tilePositionX += 2;
             this.ghostb.tilePositionX += 0.5;
+            this.groundScroll.tilePositionX += 2;
             
             // jumping
             if (Phaser.Input.Keyboard.JustDown(keyW) && this.runner.body.touching.down) {
@@ -161,6 +166,11 @@ class Play extends Phaser.Scene {
             // ghostshoot spawn and mechanics
             if (this.ghostshoot.body.position.x < 550) {
                 this.ghostshoot.setVelocityX(0);
+                if(this.ghostfiring){
+                    this.ghostfiring = false;
+                    this.ghostbullet();
+                    this.time.addEvent({ delay: 3000, callback: () => {this.ghostfiring = true}, callbackScope: this})
+                }
             }
 
             // if at max hight go down
@@ -218,6 +228,14 @@ class Play extends Phaser.Scene {
         this.bulletcreate.setScale(2);
         this.bulletcreate.body.setAllowGravity(false);
 	    this.bullets.setVelocityX(300);
+        //this.time.delayedCall(3000, () => {this.bulletcreate.destroy()}, null, this);
+    }
+
+    ghostbullet(){
+        this.bulletghostcreate = this.bulletsghost.create(this.ghostshoot.x, this.ghostshoot.y, 'bullet');
+        this.bulletghostcreate.setScale(2);
+        this.bulletghostcreate.body.setAllowGravity(false);
+	    this.bulletsghost.setVelocityX(-300);
     }
 
     ghostshootdeath(){
