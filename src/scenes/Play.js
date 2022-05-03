@@ -22,6 +22,7 @@ class Play extends Phaser.Scene {
         this.load.audio('death', './assets/Playerdeathsfx.wav');
         this.load.audio('kill', './assets/EnemyDeathsfx.wav');
         this.load.audio('fire', './assets/shootingsfx.wav');
+        this.load.audio('scarymusic', './assets/ScaryMusic.wav');
 
         //tomb
         this.load.spritesheet('tomb', './assets/tomb.png', {frameWidth: 48, frameHeight: 28});
@@ -154,12 +155,16 @@ class Play extends Phaser.Scene {
         this.physics.add.overlap(this.bulletsghost, this.walll, this.wallhitl, null, this);
         this.physics.add.overlap(this.hpup, this.runner, this.health, null, this);
         this.physics.add.overlap(this.gun, this.runner, this.guns, null, this);
+
+        this.sound.play('scarymusic');
     }
 
     update(){
 
         if(this.gameover && Phaser.Input.Keyboard.JustDown(keyR)){
             this.scene.start("menuScene");
+            this.game.sound.stopAll();
+            this.scene.restart();
         }
 
         if (!this.gameover){
