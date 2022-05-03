@@ -11,13 +11,15 @@ class Play extends Phaser.Scene {
         this.load.image('clouds', './assets/clouds.png');
         this.load.audio('jump', './assets/jumpsfx.wav');
         this.load.image('talltrees', './assets/talltrees.png');
-        this.load.image('ghostcharge', './assets/ghostenemy.png');
+        //this.load.image('ghostcharge', './assets/ghostenemy.png');
         this.load.image('ghostshoot', './assets/ghostenemy.png');
 
         //tomb
         this.load.spritesheet('tomb', './assets/tomb.png', {frameWidth: 48, frameHeight: 28});
         //runner
         this.load.spritesheet('runner', './assets/runnerspritesheet.png', {frameWidth: 32, frameHeight: 64});
+
+        this.load.spritesheet('ghostcharge', './assets/ghostsprite.png', {frameWidth: 64, frameHeight: 32});
         
     }
 
@@ -68,6 +70,14 @@ class Play extends Phaser.Scene {
             frameRate: 16,
             repeat: -1
         });
+
+        this.anims.create({
+            key: 'wiggle',
+            frames: this.anims.generateFrameNumbers('ghostcharge', {start: 0, end: 1, first: 0}),
+            frameRate: 8,
+            repeat: -1
+        });
+        this.ghostcharge.anims.play('wiggle');
 
 
         // score
@@ -159,7 +169,7 @@ class Play extends Phaser.Scene {
                 this.ghostcharge.setVelocityX(0);
                 this.ghostcharge.setX(700);
             }
-            if (this.ghostcharge.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 100){
+            if (this.ghostcharge.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 150){
                 this.ghostcharge.setVelocityX(-500);
             }
 
