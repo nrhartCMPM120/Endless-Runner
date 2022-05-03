@@ -6,6 +6,10 @@ class Play extends Phaser.Scene {
     preload(){
         this.load.image('background', './assets/nightground.png');
         this.load.image('bullet', './assets/bullet.png');
+        this.load.image('fireball', './assets/.png');
+        this.load.image('hpup', './assets/.png');
+        this.load.image('gun', './assets/.png');
+        this.load.image('HP', './assets/.png');
         this.load.image('ghostb','./assets/ghost.png');
         this.load.image('ground','./assets/ground.png');
         this.load.image('clouds', './assets/clouds.png');
@@ -55,10 +59,10 @@ class Play extends Phaser.Scene {
         this.ghostshoot = this.physics.add.sprite(700, 400, 'ghostshoot');
         this.ghostshoot.body.setAllowGravity(false);
 
-        this.hpup = this.physics.add.sprite(700, 350, '');
+        this.hpup = this.physics.add.sprite(700, 350, 'HP');
         this.hpup.body.setAllowGravity(false);
 
-        this.gun = this.physics.add.sprite(700, 350, '');
+        this.gun = this.physics.add.sprite(700, 350, 'gun');
         this.gun.body.setAllowGravity(false);
 
         // defined keys
