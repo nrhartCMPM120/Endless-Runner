@@ -59,7 +59,7 @@ class Play extends Phaser.Scene {
         this.ghostshoot = this.physics.add.sprite(700, 400, 'ghostshoot');
         this.ghostshoot.body.setAllowGravity(false);
 
-        this.hpup = this.physics.add.sprite(700, 350, 'HP');
+        this.hpup = this.physics.add.sprite(700, 350, 'hpup');
         this.hpup.body.setAllowGravity(false);
 
         this.gun = this.physics.add.sprite(700, 350, 'gun');
@@ -148,12 +148,13 @@ class Play extends Phaser.Scene {
 
         if (!this.gameover){
             this.lives.text = this.hp;
+            if (this.timecounter % 30000 == 0) this.diff += 1;
 
             // background scroll
             this.talltrees.tilePositionX += 3 + this.diff;
             this.clouds.tilePositionX += 2 + this.diff;
             this.ghostb.tilePositionX += 0.5 + this.diff;
-            this.groundScroll.tilePositionX += 2 + this.diff;
+            this.groundScroll.tilePositionX += 3 + this.diff;
             
             // jumping
             if (Phaser.Input.Keyboard.JustDown(keyW) && this.runner.body.touching.down) {
@@ -181,7 +182,7 @@ class Play extends Phaser.Scene {
                 this.tomb.setX(700);
             }
             if (this.tomb.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 400){
-                this.tomb.setVelocityX(-400 - this.diff);
+                this.tomb.setVelocityX(-180 - this.diff*70);
             }
 
             // ghostcharge spawn and mechanics
@@ -190,7 +191,7 @@ class Play extends Phaser.Scene {
                 this.ghostcharge.setX(700);
             }
             if (this.ghostcharge.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 150){
-                this.ghostcharge.setVelocityX(-500 - this.diff);
+                this.ghostcharge.setVelocityX(-500 - this.diff*50);
             }
 
             //HP Power Up spawn
@@ -207,7 +208,7 @@ class Play extends Phaser.Scene {
                 this.gun.setVelocityX(0);
                 this.gun.setX(700);
             }
-            if (this.gun.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 100){
+            if (this.gun.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 50){
                 this.gun.setVelocityX(-50);
             }
 
@@ -241,9 +242,10 @@ class Play extends Phaser.Scene {
             }
 
             if(keyF.isDown && this.isfiring){
-                if (this.upgrade = false) this.isfiring = false;
+                this.isfiring = false;
                 this.firebullet();
-                this.time.addEvent({ delay: 1500, callback: ()=> {this.isfiring = true; }, callbackScope: this});
+                if (this.upgrade == false) this.time.addEvent({ delay: 1500, callback: ()=> {this.isfiring = true; }, callbackScope: this});
+                else this.time.addEvent({ delay: 500, callback: ()=> {this.isfiring = true; }, callbackScope: this});
             }
         }
     }
@@ -258,6 +260,8 @@ class Play extends Phaser.Scene {
                 this.ghostcharge.setVelocityX(0);
                 this.tomb.setVelocityX(0);
                 this.ghostshoot.setVelocityX(0);
+                this.hpup.setVelocityX(0);
+                this.gun.setVelocityX(0);
                 this.ghostshoot.setVelocityY(0);
                 this.runner.anims.stop('run');
                 this.tomb.anims.stop('move');
@@ -278,7 +282,7 @@ class Play extends Phaser.Scene {
     firebullet(){
         this.sound.play('fire');
         this.bulletcreate = this.bullets.create(this.runner.x + 15, this.runner.y + 3, 'bullet');
-        this.bulletcreate.setScale(2);
+        this.bulletcreate.setScale(0.5);
         this.bulletcreate.body.setAllowGravity(false);
 	    this.bullets.setVelocityX(300);
         //this.time.delayedCall(3000, () => {this.bulletcreate.destroy()}, null, this);
@@ -287,7 +291,7 @@ class Play extends Phaser.Scene {
     ghostbullet(){
         this.sound.play('fire');
         this.bulletghostcreate = this.bulletsghost.create(this.ghostshoot.x, this.ghostshoot.y, 'bullet');
-        this.bulletghostcreate.setScale(2);
+        this.bulletghostcreate.setScale(0.5);
         this.bulletghostcreate.body.setAllowGravity(false);
 	    this.bulletsghost.setVelocityX(-300);
     }
@@ -316,6 +320,6 @@ class Play extends Phaser.Scene {
         this.gun.setVelocityX(0);
         this.gun.setX(700);
         this.upgrade = true;
-        this.time.delayedCall(10000, () => {this.upgrade = false}, null, this);
+        this.time.delayedCall(3000, () => {this.upgrade = false}, null, this);
     }
 }
