@@ -250,7 +250,7 @@ class Play extends Phaser.Scene {
                 this.gun.setVelocityX(0);
                 this.gun.setX(700);
             }
-            if (this.gun.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 75){
+            if (this.upgrade == false && this.gun.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 75){
                 this.gun.setVelocityX(-200);
             }
 
