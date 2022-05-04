@@ -133,6 +133,8 @@ class Play extends Phaser.Scene {
         this.diff = 0;
         this.gameover = false;
         this.loop = false;
+        this.hiyscoreword = this.add.text(170, borderUISize + borderPadding - 16, 'High Score: ', { font: '28px Press Start 2P', fill: '#8742f5', strokeThickness: '4'}).setOrigin(0.5);
+        this.hiscore = this.add.text(110, borderUISize + borderPadding - 16, game.highscore / 1000, { font: '28px Press Start 2P', fill: '#8742f5', strokeThickness: '4'}).setOrigin(0.5);
         this.scoreword = this.add.text(game.config.width/2 + 415, borderUISize + borderPadding - 16, 'Score: ', { font: '28px Press Start 2P', fill: '#8742f5', strokeThickness: '4'}).setOrigin(0.5);
         this.score = this.add.text(game.config.width/2 + 490, borderUISize + borderPadding - 16, this.scorecounter / 1000, { font: '28px Press Start 2P', fill: '#8742f5', strokeThickness: '4'}).setOrigin(0.5);
         this.overlay = this.add.rectangle(0, 0, game.config.width, borderUISize + 15, 0xFFFFFF).setOrigin(0, 0);
@@ -216,7 +218,7 @@ class Play extends Phaser.Scene {
                 this.tomb.setVelocityX(0);
                 this.tomb.setX(700);
             }
-            if (this.tomb.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 400){
+            if (this.tomb.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 400 + this.diff){
                 this.tomb.setVelocityX(-180 - this.diff*70);
             }
 
@@ -226,7 +228,7 @@ class Play extends Phaser.Scene {
                 this.ghostcharge.setX(700);
                 this.ghostcharge.setY(100);
             }
-            if (this.ghostcharge.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 150){
+            if (this.ghostcharge.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 150 + this.diff){
                 this.ghostcharge.setY(350);
                 this.ghostcharge.setVelocityX(-500 - this.diff*50);
             }
@@ -274,7 +276,7 @@ class Play extends Phaser.Scene {
                 this.isfloating = true;
             }
 
-            if (this.ghostshoot.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 75){
+            if (this.ghostshoot.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 75 + this.diff){
                 this.ghostshoot.setY(400);
                 this.ghostshoot.setVelocityX(-150);
             }
@@ -296,6 +298,10 @@ class Play extends Phaser.Scene {
                 //this.lives.text = this.hp;
                 this.hp1.alpha = 0;
                 this.gameover = true;
+                if (this.scorecounter >= game.highscore) {
+                    game.highscore = this.scorecounter;
+                    this.hiscore.text = parseInt(game.highscore / 1000);
+                }
                 this.ghostcharge.setVelocityX(0);
                 this.tomb.setVelocityX(0);
                 this.ghostshoot.setVelocityX(0);

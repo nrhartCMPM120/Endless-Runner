@@ -26,7 +26,8 @@ class Menu extends Phaser.Scene {
 
         this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'ENDLESS RUNNER', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2, 'Press (W) to Play', menuConfig).setOrigin(0.5);
-
+        this.hiscoreword = this.add.text(170, borderUISize + borderPadding - 16, 'High Score: ', { font: '28px Press Start 2P', fill: '#8742f5', strokeThickness: '4'}).setOrigin(0.5);
+        this.hiscore = this.add.text(110, borderUISize + borderPadding - 16, game.highscore / 1000, { font: '28px Press Start 2P', fill: '#8742f5', strokeThickness: '4'}).setOrigin(0.5);
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
 
     }
