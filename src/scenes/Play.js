@@ -13,7 +13,7 @@ class Play extends Phaser.Scene {
         this.load.image('gun', './assets/bulletpowerup.png');
         this.load.image('HP', './assets/heart.png');
         //this.load.image('wall', './assets/wall.png');
-        this.load.image('ghostb','./assets/ghost.png');
+        this.load.image('ghostb','./assets/ghosts.png');
         this.load.image('ground','./assets/ground.png');
         this.load.image('clouds', './assets/clouds.png');
         this.load.audio('jump', './assets/jumpsfx.wav');
@@ -164,7 +164,10 @@ class Play extends Phaser.Scene {
         this.physics.add.overlap(this.hpup, this.runner, this.health, null, this);
         this.physics.add.overlap(this.gun, this.runner, this.guns, null, this);
 
-        this.sound.play('scarymusic');
+        //this.sound.play('scarymusic');
+        var music = this.sound.add('scarymusic');
+        music.setLoop(true);
+        music.play();
     }
 
     update(){
