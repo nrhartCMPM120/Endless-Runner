@@ -329,7 +329,6 @@ class Play extends Phaser.Scene {
         this.bulletcreate.setScale(0.5);
         this.bulletcreate.body.setAllowGravity(false);
 	    this.bullets.setVelocityX(300);
-        this.time.delayedCall(30000, () => {this.bulletcreate.destroy()}, null, this);
     }
 
     ghostbullet(){
@@ -338,7 +337,6 @@ class Play extends Phaser.Scene {
         this.bulletghostcreate.setScale(0.5);
         this.bulletghostcreate.body.setAllowGravity(false);
 	    this.bulletsghost.setVelocityX(-300);
-        this.time.delayedCall(2900, () => {this.bulletghostcreate.destroy()}, null, this);
     }
 
     ghostshootdeath(){
