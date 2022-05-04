@@ -133,10 +133,10 @@ class Play extends Phaser.Scene {
         this.diff = 0;
         this.gameover = false;
         this.loop = false;
-        this.hiyscoreword = this.add.text(170, borderUISize + borderPadding - 16, 'High Score: ', { font: '28px Press Start 2P', fill: '#8742f5', strokeThickness: '4'}).setOrigin(0.5);
-        this.hiscore = this.add.text(110, borderUISize + borderPadding - 16, game.highscore / 1000, { font: '28px Press Start 2P', fill: '#8742f5', strokeThickness: '4'}).setOrigin(0.5);
-        this.scoreword = this.add.text(game.config.width/2 + 415, borderUISize + borderPadding - 16, 'Score: ', { font: '28px Press Start 2P', fill: '#8742f5', strokeThickness: '4'}).setOrigin(0.5);
-        this.score = this.add.text(game.config.width/2 + 490, borderUISize + borderPadding - 16, this.scorecounter / 1000, { font: '28px Press Start 2P', fill: '#8742f5', strokeThickness: '4'}).setOrigin(0.5);
+        //this.hiscoreword = this.add.text(300, borderUISize + borderPadding - 16, 'High Score: ', { font: '28px Press Start 2P', fill: '#8742f5'}).setOrigin(0.5);
+        //this.hiscore = this.add.text(410, borderUISize + borderPadding - 16, parseInt(game.highscore / 1000), { font: '28px Press Start 2P', fill: '#8742f5'}).setOrigin(0.5);
+        this.scoreword = this.add.text(game.config.width/2 + 230, borderUISize + borderPadding - 16, 'Score:', { font: '28px Press Start 2P', fill: '#8742f5'}).setOrigin(0.5);
+        this.score = this.add.text(game.config.width/2 + 300, borderUISize + borderPadding - 16, this.scorecounter / 1000, { font: '28px Press Start 2P', fill: '#8742f5'}).setOrigin(0.5);
         this.overlay = this.add.rectangle(0, 0, game.config.width, borderUISize + 15, 0xFFFFFF).setOrigin(0, 0);
         this.overlay.alpha = 0.1;
 
@@ -300,11 +300,13 @@ class Play extends Phaser.Scene {
                 this.gameover = true;
                 if (this.scorecounter >= game.highscore) {
                     game.highscore = this.scorecounter;
-                    this.hiscore.text = parseInt(game.highscore / 1000);
+                    //this.hiscore.text = parseInt(game.highscore / 1000);
                 }
                 this.ghostcharge.setVelocityX(0);
+                this.bullets.setVelocityX(0);
                 this.tomb.setVelocityX(0);
                 this.ghostshoot.setVelocityX(0);
+                this.bulletsghost.setVelocityX(0);
                 this.hpup.setVelocityX(0);
                 this.gun.setVelocityX(0);
                 this.ghostshoot.setVelocityY(0);
