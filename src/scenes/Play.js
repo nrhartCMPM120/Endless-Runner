@@ -236,7 +236,7 @@ class Play extends Phaser.Scene {
                 this.hpup.setVelocityX(0);
                 this.hpup.setX(700);
             }
-            if (this.hp < 3 && this.hpup.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 40){
+            if (this.hp < 3 && this.hpup.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 50){
                 this.hpup.setVelocityX(-200);
             }
 
@@ -245,7 +245,7 @@ class Play extends Phaser.Scene {
                 this.gun.setVelocityX(0);
                 this.gun.setX(700);
             }
-            if (this.upgrade == false && this.gun.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 60){
+            if (this.upgrade == false && this.gun.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 75){
                 this.gun.setVelocityX(-200);
             }
 
