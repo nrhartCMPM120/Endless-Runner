@@ -124,27 +124,16 @@ class Play extends Phaser.Scene {
 
 
         // score
-        let scoreConfig = {
-            fontfamily: 'Monaco',
-            fontSize: '28px',
-            //backgroundColor: '#F3B141',
-            color: '#000000',
-            align: 'center',
-            padding: {
-            top: 5,
-            bottom: 5,
-            },
-            fixedWidth: 100
-        }
-        this.hp = 3;                                    //Total Lives of runner {default: 3}
+
+        this.hp = 3;     //Total Lives of runner {default: 3}
         this.iframe = false;
         this.timecounter = 0;
         this.scorecounter = 0;
         this.diff = 0;
         this.gameover = false;
         this.loop = false;
-        this.scoreword = this.add.text(game.config.width/2 + 230, borderUISize + borderPadding - 16, 'Score: ', scoreConfig).setOrigin(0.5);
-        this.score = this.add.text(game.config.width/2 + 295, borderUISize + borderPadding - 16, this.scorecounter / 1000, scoreConfig).setOrigin(0.5);
+        this.scoreword = this.add.text(game.config.width/2 + 230, borderUISize + borderPadding - 16, 'Score: ', { font: '28px Press Start 2P', fill: '#8742f5' }).setOrigin(0.5);
+        this.score = this.add.text(game.config.width/2 + 295, borderUISize + borderPadding - 16, this.scorecounter / 1000, { font: '28px Press Start 2P', fill: '#8742f5' }).setOrigin(0.5);
         this.overlay = this.add.rectangle(0, 0, game.config.width, borderUISize + 15, 0xFFFFFF).setOrigin(0, 0);
         this.overlay.alpha = 0.1;
 
@@ -152,7 +141,6 @@ class Play extends Phaser.Scene {
         this.spawntomb = false;
         this.groundcollide = this.physics.add.collider(this.runner, this.ground);
         
-        //this.lives = this.add.text(70, borderUISize + borderPadding - 16, this.iframe, scoreConfig).setOrigin(0.5);
 
         // check if ghostshoot is going up
         this.isfloating = true;
@@ -244,7 +232,7 @@ class Play extends Phaser.Scene {
                 this.hpup.setVelocityX(0);
                 this.hpup.setX(700);
             }
-            if (this.hp < 3 && this.hpup.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 50){
+            if (this.hp < 3 && this.hpup.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 40){
                 this.hpup.setVelocityX(-200);
             }
 
@@ -253,7 +241,7 @@ class Play extends Phaser.Scene {
                 this.gun.setVelocityX(0);
                 this.gun.setX(700);
             }
-            if (this.upgrade == false && this.gun.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 55){
+            if (this.upgrade == false && this.gun.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 60){
                 this.gun.setVelocityX(-200);
             }
 
