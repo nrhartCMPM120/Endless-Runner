@@ -135,8 +135,8 @@ class Play extends Phaser.Scene {
         this.loop = false;
         this.hiyscoreword = this.add.text(170, borderUISize + borderPadding - 16, 'High Score: ', { font: '28px Press Start 2P', fill: '#8742f5', strokeThickness: '4'}).setOrigin(0.5);
         this.hiscore = this.add.text(110, borderUISize + borderPadding - 16, game.highscore / 1000, { font: '28px Press Start 2P', fill: '#8742f5', strokeThickness: '4'}).setOrigin(0.5);
-        this.scoreword = this.add.text(game.config.width/2 + 240, borderUISize + borderPadding - 16, 'Score: ', { font: '28px Press Start 2P', fill: '#8742f5', strokeThickness: '4'}).setOrigin(0.5);
-        this.score = this.add.text(game.config.width/2 + 290, borderUISize + borderPadding - 16, this.scorecounter / 1000, { font: '28px Press Start 2P', fill: '#8742f5', strokeThickness: '4'}).setOrigin(0.5);
+        this.scoreword = this.add.text(game.config.width/2 + 240, borderUISize + borderPadding - 16, 'Score: ', { font: '28px Press Start 2P', fill: '#8742f5'}).setOrigin(0.5);
+        this.score = this.add.text(game.config.width/2 + 290, borderUISize + borderPadding - 16, this.scorecounter / 1000, { font: '28px Press Start 2P', fill: '#8742f5'}).setOrigin(0.5);
         this.overlay = this.add.rectangle(0, 0, game.config.width, borderUISize + 15, 0xFFFFFF).setOrigin(0, 0);
         this.overlay.alpha = 0.1;
 
