@@ -91,6 +91,7 @@ class Play extends Phaser.Scene {
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+        keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
 
         this.anims.create({
             key: 'move',
@@ -166,8 +167,11 @@ class Play extends Phaser.Scene {
 
     update(){
 
-        if(this.gameover && Phaser.Input.Keyboard.JustDown(keyR)){
+        if(this.gameover && Phaser.Input.Keyboard.JustDown(keyM)){
+            this.game.sound.stopAll();
             this.scene.start("menuScene");
+        }
+        if(this.gameover && Phaser.Input.Keyboard.JustDown(keyR)){
             this.game.sound.stopAll();
             this.scene.restart();
         }
@@ -308,7 +312,7 @@ class Play extends Phaser.Scene {
                 this.scoreword.destroy();
                 this.overlay.destroy();
                 this.add.text(game.config.width/2, game.config.height/2 - 32, 'GAME OVER', { font: '28px Press Start 2P', fill: '#ff0044' }).setOrigin(0.5);
-                this.add.text(game.config.width/2, game.config.height/2, 'Press (R) to Restart', { font: '28px Press Start 2P', fill: '#ff0044' }).setOrigin(0.5);
+                this.add.text(game.config.width/2, game.config.height/2, 'Press (R) to Restart or (M) for Menu', { font: '28px Press Start 2P', fill: '#ff0044' }).setOrigin(0.5);
                 this.add.text(game.config.width/2, game.config.height/2 + 32, 'Score: ' + parseInt(this.scorecounter/1000), { font: '28px Press Start 2P', fill: '#ff0044' }).setOrigin(0.5);
 
             }
