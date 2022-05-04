@@ -133,8 +133,8 @@ class Play extends Phaser.Scene {
         this.diff = 0;
         this.gameover = false;
         this.loop = false;
-        this.scoreword = this.add.text(game.config.width/2 + 420, borderUISize + borderPadding - 16, 'Score: ', { font: '28px Press Start 2P', fill: '#8742f5', strokeThickness: '4'}).setOrigin(0.5);
-        this.score = this.add.text(game.config.width/2 + 470, borderUISize + borderPadding - 16, this.scorecounter / 1000, { font: '28px Press Start 2P', fill: '#8742f5', strokeThickness: '4'}).setOrigin(0.5);
+        this.scoreword = this.add.text(game.config.width/2 + 415, borderUISize + borderPadding - 16, 'Score: ', { font: '28px Press Start 2P', fill: '#8742f5', strokeThickness: '4'}).setOrigin(0.5);
+        this.score = this.add.text(game.config.width/2 + 490, borderUISize + borderPadding - 16, this.scorecounter / 1000, { font: '28px Press Start 2P', fill: '#8742f5', strokeThickness: '4'}).setOrigin(0.5);
         this.overlay = this.add.rectangle(0, 0, game.config.width, borderUISize + 15, 0xFFFFFF).setOrigin(0, 0);
         this.overlay.alpha = 0.1;
 
