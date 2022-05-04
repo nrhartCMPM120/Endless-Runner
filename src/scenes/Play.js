@@ -4,13 +4,15 @@ class Play extends Phaser.Scene {
     }
 
     preload(){
+
+        // images
         this.load.image('background', './assets/nightground.png');
         this.load.image('bullet', './assets/bullet.png');
-        //this.load.image('fireball', './assets/.png');
+        this.load.image('fireball', './assets/fireball.png');
         this.load.image('hpup', './assets/heartpowerup.png');
         this.load.image('gun', './assets/bulletpowerup.png');
         this.load.image('HP', './assets/heart.png');
-        this.load.image('wall', './assets/wall.png');
+        //this.load.image('wall', './assets/wall.png');
         this.load.image('ghostb','./assets/ghost.png');
         this.load.image('ground','./assets/ground.png');
         this.load.image('clouds', './assets/clouds.png');
@@ -18,18 +20,23 @@ class Play extends Phaser.Scene {
         this.load.image('talltrees', './assets/talltrees.png');
         //this.load.image('ghostcharge', './assets/ghostenemy.png');
         this.load.image('ghostshoot', './assets/ghostenemy.png');
+
+        // audio
         this.load.audio('hit', './assets/playerdamagesfx.wav');
         this.load.audio('death', './assets/Playerdeathsfx.wav');
         this.load.audio('kill', './assets/EnemyDeathsfx.wav');
         this.load.audio('fire', './assets/shootingsfx.wav');
         this.load.audio('scarymusic', './assets/ScaryMusic.wav');
 
+        // spritesheets
         //tomb
         this.load.spritesheet('tomb', './assets/tomb.png', {frameWidth: 48, frameHeight: 28});
         //runner
         this.load.spritesheet('runner', './assets/runnerspritesheet.png', {frameWidth: 32, frameHeight: 64});
-
+        //ghost
         this.load.spritesheet('ghostcharge', './assets/ghostsprite.png', {frameWidth: 64, frameHeight: 32});
+
+        this.load.spritesheet('ghostdeath', './assets/ghostdeath.png', {frameWidth: 64, frameHeight: 32})
         
     }
 
@@ -49,31 +56,31 @@ class Play extends Phaser.Scene {
         this.ground = this.physics.add.staticImage(400, 495, 'ground').setScale(2).refreshBody();
         this.groundScroll = this.add.tileSprite(0, game.config.height-95, game.config.width, 95, 'ground').setOrigin(0);
         
-        this.runner = this.physics.add.sprite(100, 300, 'runner');
+        this.runner = this.physics.add.sprite(100, 300, 'runner').setSize(25, 50, true).setOffset(2, 10);
         
         //added sprites
         this.tomb = this.physics.add.sprite(700, 368, 'tomb');
         this.tomb.body.setAllowGravity(false);
 
-        this.ghostcharge = this.physics.add.sprite(7000, 350, 'ghostcharge');
+        this.ghostcharge = this.physics.add.sprite(700, 100, 'ghostcharge');
         this.ghostcharge.body.setAllowGravity(false);
 
-        this.ghostshoot = this.physics.add.sprite(7000, 400, 'ghostshoot');
+        this.ghostshoot = this.physics.add.sprite(700, 100, 'ghostshoot');
         this.ghostshoot.body.setAllowGravity(false);
 
-        this.hpup = this.physics.add.sprite(700, 350, 'hpup');
+        this.hpup = this.physics.add.sprite(700, 250, 'hpup');
         this.hpup.body.setAllowGravity(false);
 
-        this.gun = this.physics.add.sprite(700, 350, 'gun');
+        this.gun = this.physics.add.sprite(700, 250, 'gun');
         this.gun.body.setAllowGravity(false);
-
+/*
         this.wallr = this.physics.add.sprite(650, 240, 'wall');
         this.wallr.body.setAllowGravity(false);
         this.wallr.alpha = 0;
         this.walll = this.physics.add.sprite(-50, 240, 'wall');
         this.walll.body.setAllowGravity(false);
         this.walll.alpha = 0;
-
+*/
         this.hp1 = this.physics.add.sprite(60, borderUISize + borderPadding - 16, 'HP');
         this.hp1.body.setAllowGravity(false);
         this.hp2 = this.physics.add.sprite(100, borderUISize + borderPadding - 16, 'HP');
@@ -108,6 +115,13 @@ class Play extends Phaser.Scene {
             repeat: -1
         });
         this.ghostcharge.anims.play('wiggle');
+
+        this.anims.create({
+            key: 'death',
+            frames: this.anims.generateFrameNumbers('ghostdeath', {start: 0, end: 4, first: 0}),
+            frameRate: 8,
+            repeat: 0
+        });
 
 
         // score
@@ -149,10 +163,10 @@ class Play extends Phaser.Scene {
         this.physics.add.overlap(this.runner, this.tomb, this.hit, null, this);
         this.physics.add.overlap(this.runner, this.ghostcharge, this.hit, null, this);
         this.physics.add.overlap(this.bullets, this.ghostshoot, this.ghostshootdeath, null, this);
-        this.physics.add.overlap(this.bullets, this.wallr, this.wallhitr, null, this);
+        //this.physics.add.overlap(this.bullets, this.wallr, this.wallhitr, null, this);
         this.physics.add.overlap(this.bullets, this.ghostcharge, this.ghostchargedeath, null, this);
         this.physics.add.overlap(this.bulletsghost, this.runner, this.hit, null, this);
-        this.physics.add.overlap(this.bulletsghost, this.walll, this.wallhitl, null, this);
+        //this.physics.add.overlap(this.bulletsghost, this.walll, this.wallhitl, null, this);
         this.physics.add.overlap(this.hpup, this.runner, this.health, null, this);
         this.physics.add.overlap(this.gun, this.runner, this.guns, null, this);
 
@@ -215,8 +229,10 @@ class Play extends Phaser.Scene {
             if (this.ghostcharge.body.position.x < -50) {
                 this.ghostcharge.setVelocityX(0);
                 this.ghostcharge.setX(700);
+                this.ghostcharge.setY(100);
             }
             if (this.ghostcharge.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 150){
+                this.ghostcharge.setY(350);
                 this.ghostcharge.setVelocityX(-500 - this.diff*50);
             }
 
@@ -225,8 +241,8 @@ class Play extends Phaser.Scene {
                 this.hpup.setVelocityX(0);
                 this.hpup.setX(700);
             }
-            if (this.hp < 3 && this.hpup.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 10){
-                this.hpup.setVelocityX(-50);
+            if (this.hp < 3 && this.hpup.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 50){
+                this.hpup.setVelocityX(-200);
             }
 
             //Gun Power Up spawn
@@ -234,8 +250,8 @@ class Play extends Phaser.Scene {
                 this.gun.setVelocityX(0);
                 this.gun.setX(700);
             }
-            if (this.gun.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 50){
-                this.gun.setVelocityX(-50);
+            if (this.gun.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 75){
+                this.gun.setVelocityX(-200);
             }
 
             // ghostshoot spawn and mechanics
@@ -249,21 +265,22 @@ class Play extends Phaser.Scene {
             }
 
             // if at max hight go down
-            if (this.ghostshoot.body.position.y < 270 && this.isfloating) {
+            if (this.ghostshoot.body.position.y < 270 && this.isfloating && this.ghostshoot.body.position.x < 640) {
                 this.ghostshoot.setVelocityY(50);
             }
-            if (this.ghostshoot.body.position.y > 350 && this.isfloating) {
+            if (this.ghostshoot.body.position.y > 350 && this.isfloating && this.ghostshoot.body.position.x < 640) {
                 this.isfloating = false;
             }
             // if at min hight go up
-            if (this.ghostshoot.body.position.y > 350 && !this.isfloating) {
+            if (this.ghostshoot.body.position.y > 350 && !this.isfloating && this.ghostshoot.body.position.x < 640) {
                 this.ghostshoot.setVelocityY(-50);
             }
-            if (this.ghostshoot.body.position.y < 270 && !this.isfloating) {
+            if (this.ghostshoot.body.position.y < 270 && !this.isfloating && this.ghostshoot.body.position.x < 640) {
                 this.isfloating = true;
             }
 
             if (this.ghostshoot.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 75){
+                this.ghostshoot.setY(400);
                 this.ghostshoot.setVelocityX(-150);
             }
 
@@ -294,6 +311,8 @@ class Play extends Phaser.Scene {
                 this.tomb.anims.stop('move');
                 this.ghostshoot.anims.stop('wiggle');
                 this.ghostcharge.anims.stop('wiggle');
+                this.bulletcreate.destroy();
+                this.bulletghostcreate.destroy();
                 this.physics.world.removeCollider(this.groundcollide);
                 this.runner.setVelocityY(-300);
                 this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', { font: '28px Press Start 2P', fill: '#ff0044'}).setOrigin(0.5);
@@ -317,7 +336,7 @@ class Play extends Phaser.Scene {
 
     ghostbullet(){
         this.sound.play('fire');
-        this.bulletghostcreate = this.bulletsghost.create(this.ghostshoot.x, this.ghostshoot.y, 'bullet');
+        this.bulletghostcreate = this.bulletsghost.create(this.ghostshoot.x, this.ghostshoot.y, 'fireball');
         this.bulletghostcreate.setScale(0.5);
         this.bulletghostcreate.body.setAllowGravity(false);
 	    this.bulletsghost.setVelocityX(-300);
@@ -325,13 +344,17 @@ class Play extends Phaser.Scene {
 
     ghostshootdeath(){
         this.sound.play('kill');
+        this.deathanimation(this.ghostshoot);
         this.scorecounter += 10000;
+        this.ghostshoot.setVelocityY(0);
+        this.ghostshoot.setY(100);
         this.ghostshoot.setX(700);
         this.bulletcreate.destroy();
     }
 
     ghostchargedeath(){
         this.sound.play('kill');
+        this.deathanimation(this.ghostcharge);
         this.scorecounter += 5000;
         this.ghostcharge.setX(-50);
         this.bulletcreate.destroy();
@@ -349,7 +372,7 @@ class Play extends Phaser.Scene {
         this.upgrade = true;
         this.time.delayedCall(3000, () => {this.upgrade = false}, null, this);
     }
-
+/*
     wallhitr() {
         this.bulletcreate.destroy();
     }
@@ -357,4 +380,13 @@ class Play extends Phaser.Scene {
     wallhitl() {
         this.bulletghostcreate.destroy();
     }
+*/
+
+    deathanimation(ghost) {
+        let die = this.add.sprite(ghost.x, ghost.y, 'death');
+        die.anims.play('death');   
+        die.on('animationcomplete', () => { 
+            die.destroy();                
+        });
+    }     
 }
