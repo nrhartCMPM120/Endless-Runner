@@ -124,8 +124,8 @@ class Play extends Phaser.Scene {
         this.diff = 0;
         this.gameover = false;
         this.loop = false;
-        this.scoreword = this.add.text(game.config.width/2 + 230, borderUISize + borderPadding - 16, 'Score:', { font: '28px Press Start 2P', fill: '#8742f5'}).setOrigin(0.5);
-        this.score = this.add.text(game.config.width/2 + 300, borderUISize + borderPadding - 16, this.scorecounter / 1000, { font: '28px Press Start 2P', fill: '#8742f5'}).setOrigin(0.5);
+        this.scoreword = this.add.text(game.config.width/2 + 205, borderUISize + borderPadding - 16, 'Score:', { font: '28px Impact', fill: '#8742f5'}).setOrigin(0.5);
+        this.score = this.add.text(game.config.width/2 + 280, borderUISize + borderPadding - 16, this.scorecounter / 1000, { font: '28px Impact', fill: '#8742f5'}).setOrigin(0.5);
         this.overlay = this.add.rectangle(0, 0, game.config.width, borderUISize + 15, 0xFFFFFF).setOrigin(0, 0);
         this.overlay.alpha = 0.1;
 
@@ -308,9 +308,9 @@ class Play extends Phaser.Scene {
                 this.score.destroy();
                 this.scoreword.destroy();
                 this.overlay.destroy();
-                this.add.text(game.config.width/2, game.config.height/2 - 32, 'GAME OVER', { font: '28px Press Start 2P', fill: '#ff0044' }).setOrigin(0.5);
-                this.add.text(game.config.width/2, game.config.height/2, 'Press (R) to Restart or (M) for Menu', { font: '28px Press Start 2P', fill: '#ff0044' }).setOrigin(0.5);
-                this.add.text(game.config.width/2, game.config.height/2 + 32, 'Score: ' + parseInt(this.scorecounter/1000), { font: '28px Press Start 2P', fill: '#ff0044' }).setOrigin(0.5);
+                this.add.text(game.config.width/2, game.config.height/2 - 32, 'GAME OVER', { font: '28px Impact', fill: '#ff0044' }).setOrigin(0.5);
+                this.add.text(game.config.width/2, game.config.height/2, 'Press (R) to Restart or (M) for Menu', { font: '28px Impact', fill: '#ff0044' }).setOrigin(0.5);
+                this.add.text(game.config.width/2, game.config.height/2 + 32, 'Score: ' + parseInt(this.scorecounter/1000), { font: '28px Impact', fill: '#ff0044' }).setOrigin(0.5);
 
             }
             else {
