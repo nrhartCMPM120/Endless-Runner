@@ -52,7 +52,6 @@ class Play extends Phaser.Scene {
         this.clouds = this.add.tileSprite(0, 0, 640, 480, 'clouds').setOrigin(0, 0);
 
         // floor
-        //this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
         this.ground = this.physics.add.staticImage(400, 495, 'ground').setScale(2).refreshBody();
         this.groundScroll = this.add.tileSprite(0, game.config.height-95, game.config.width, 95, 'ground').setOrigin(0);
         
@@ -126,7 +125,7 @@ class Play extends Phaser.Scene {
 
         // score
         let scoreConfig = {
-            fontFamily: 'Courier',
+            fontfamily: 'Monaco',
             fontSize: '28px',
             //backgroundColor: '#F3B141',
             color: '#000000',
@@ -146,7 +145,9 @@ class Play extends Phaser.Scene {
         this.loop = false;
         this.scoreword = this.add.text(game.config.width/2 + 230, borderUISize + borderPadding - 16, 'Score: ', scoreConfig).setOrigin(0.5);
         this.score = this.add.text(game.config.width/2 + 295, borderUISize + borderPadding - 16, this.scorecounter / 1000, scoreConfig).setOrigin(0.5);
-        
+        this.overlay = this.add.rectangle(0, 0, game.config.width, borderUISize + 15, 0xFFFFFF).setOrigin(0, 0);
+        this.overlay.alpha = 0.1;
+
         
         this.spawntomb = false;
         this.groundcollide = this.physics.add.collider(this.runner, this.ground);
@@ -315,6 +316,9 @@ class Play extends Phaser.Scene {
                 this.ghostcharge.anims.stop('wiggle');
                 this.physics.world.removeCollider(this.groundcollide);
                 this.runner.setVelocityY(-300);
+                this.score.destroy();
+                this.scoreword.destroy();
+                this.overlay.destroy();
                 this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', { font: '28px Press Start 2P', fill: '#ff0044'}).setOrigin(0.5);
                 this.add.text(game.config.width/2, game.config.height/2 + 32, 'Press (R) for menu', { font: '28px Press Start 2P', fill: '#ff0044' }).setOrigin(0.5);
                 this.add.text(game.config.width/2, game.config.height/2 + 64, 'Score: ' + parseInt(this.scorecounter/1000), { font: '28px Press Start 2P', fill: '#ff0044' }).setOrigin(0.5);
