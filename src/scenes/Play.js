@@ -311,8 +311,6 @@ class Play extends Phaser.Scene {
                 this.tomb.anims.stop('move');
                 this.ghostshoot.anims.stop('wiggle');
                 this.ghostcharge.anims.stop('wiggle');
-                this.bulletcreate.destroy();
-                this.bulletghostcreate.destroy();
                 this.physics.world.removeCollider(this.groundcollide);
                 this.runner.setVelocityY(-300);
                 this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', { font: '28px Press Start 2P', fill: '#ff0044'}).setOrigin(0.5);
@@ -331,7 +329,7 @@ class Play extends Phaser.Scene {
         this.bulletcreate.setScale(0.5);
         this.bulletcreate.body.setAllowGravity(false);
 	    this.bullets.setVelocityX(300);
-        //this.time.delayedCall(3000, () => {this.bulletcreate.destroy()}, null, this);
+        this.time.delayedCall(30000, () => {this.bulletcreate.destroy()}, null, this);
     }
 
     ghostbullet(){
@@ -340,6 +338,7 @@ class Play extends Phaser.Scene {
         this.bulletghostcreate.setScale(0.5);
         this.bulletghostcreate.body.setAllowGravity(false);
 	    this.bulletsghost.setVelocityX(-300);
+        this.time.delayedCall(2900, () => {this.bulletghostcreate.destroy()}, null, this);
     }
 
     ghostshootdeath(){
