@@ -147,6 +147,7 @@ class Play extends Phaser.Scene {
         this.scoreword = this.add.text(game.config.width/2 + 230, borderUISize + borderPadding - 16, 'Score: ', scoreConfig).setOrigin(0.5);
         this.score = this.add.text(game.config.width/2 + 295, borderUISize + borderPadding - 16, this.scorecounter / 1000, scoreConfig).setOrigin(0.5);
         
+        
         this.spawntomb = false;
         this.groundcollide = this.physics.add.collider(this.runner, this.ground);
         
