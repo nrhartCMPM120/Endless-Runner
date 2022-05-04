@@ -12,13 +12,11 @@ class Play extends Phaser.Scene {
         this.load.image('hpup', './assets/heartpowerup.png');
         this.load.image('gun', './assets/bulletpowerup.png');
         this.load.image('HP', './assets/heart.png');
-        //this.load.image('wall', './assets/wall.png');
         this.load.image('ghostb','./assets/ghosts.png');
         this.load.image('ground','./assets/ground.png');
         this.load.image('clouds', './assets/clouds.png');
         this.load.audio('jump', './assets/jumpsfx.wav');
         this.load.image('talltrees', './assets/talltrees.png');
-        //this.load.image('ghostcharge', './assets/ghostenemy.png');
         this.load.image('ghostshoot', './assets/ghostenemy.png');
 
         // audio
@@ -72,14 +70,7 @@ class Play extends Phaser.Scene {
 
         this.gun = this.physics.add.sprite(700, 250, 'gun');
         this.gun.body.setAllowGravity(false);
-/*
-        this.wallr = this.physics.add.sprite(650, 240, 'wall');
-        this.wallr.body.setAllowGravity(false);
-        this.wallr.alpha = 0;
-        this.walll = this.physics.add.sprite(-50, 240, 'wall');
-        this.walll.body.setAllowGravity(false);
-        this.walll.alpha = 0;
-*/
+
         this.hp1 = this.physics.add.sprite(60, borderUISize + borderPadding - 16, 'HP');
         this.hp1.body.setAllowGravity(false);
         this.hp2 = this.physics.add.sprite(100, borderUISize + borderPadding - 16, 'HP');
@@ -133,8 +124,6 @@ class Play extends Phaser.Scene {
         this.diff = 0;
         this.gameover = false;
         this.loop = false;
-        //this.hiscoreword = this.add.text(300, borderUISize + borderPadding - 16, 'High Score: ', { font: '28px Press Start 2P', fill: '#8742f5'}).setOrigin(0.5);
-        //this.hiscore = this.add.text(410, borderUISize + borderPadding - 16, parseInt(game.highscore / 1000), { font: '28px Press Start 2P', fill: '#8742f5'}).setOrigin(0.5);
         this.scoreword = this.add.text(game.config.width/2 + 230, borderUISize + borderPadding - 16, 'Score:', { font: '28px Press Start 2P', fill: '#8742f5'}).setOrigin(0.5);
         this.score = this.add.text(game.config.width/2 + 300, borderUISize + borderPadding - 16, this.scorecounter / 1000, { font: '28px Press Start 2P', fill: '#8742f5'}).setOrigin(0.5);
         this.overlay = this.add.rectangle(0, 0, game.config.width, borderUISize + 15, 0xFFFFFF).setOrigin(0, 0);
@@ -182,7 +171,6 @@ class Play extends Phaser.Scene {
         }
 
         if (!this.gameover){
-            //this.lives.text = this.hp;
             if (this.hp < 3) this.hp3.alpha = 0;
             else this.hp3.alpha = 100;
             if (this.hp < 2) this.hp2.alpha = 0;
@@ -298,12 +286,10 @@ class Play extends Phaser.Scene {
             this.hp -= 1;
             if (this.hp == 0) {
                 this.sound.play('death');
-                //this.lives.text = this.hp;
                 this.hp1.alpha = 0;
                 this.gameover = true;
                 if (this.scorecounter >= game.highscore) {
                     game.highscore = this.scorecounter;
-                    //this.hiscore.text = parseInt(game.highscore / 1000);
                 }
                 this.ghostcharge.setVelocityX(0);
                 this.bullets.setVelocityX(0);
@@ -380,15 +366,6 @@ class Play extends Phaser.Scene {
         this.upgrade = true;
         this.time.delayedCall(3000, () => {this.upgrade = false}, null, this);
     }
-/*
-    wallhitr() {
-        this.bulletcreate.destroy();
-    }
-
-    wallhitl() {
-        this.bulletghostcreate.destroy();
-    }
-*/
 
     deathanimation(ghost) {
         let die = this.add.sprite(ghost.x, ghost.y, 'death');
