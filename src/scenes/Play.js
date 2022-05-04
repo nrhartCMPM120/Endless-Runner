@@ -128,7 +128,7 @@ class Play extends Phaser.Scene {
         let scoreConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
-            backgroundColor: '#F3B141',
+            //backgroundColor: '#F3B141',
             color: '#000000',
             align: 'center',
             padding: {
@@ -144,7 +144,8 @@ class Play extends Phaser.Scene {
         this.diff = 0;
         this.gameover = false;
         this.loop = false;
-        this.score = this.add.text(game.config.width/2, borderUISize + borderPadding - 16, this.scorecounter / 1000, scoreConfig).setOrigin(0.5);
+        this.scoreword = this.add.text(game.config.width/2 + 230, borderUISize + borderPadding - 16, 'Score: ', scoreConfig).setOrigin(0.5);
+        this.score = this.add.text(game.config.width/2 + 295, borderUISize + borderPadding - 16, this.scorecounter / 1000, scoreConfig).setOrigin(0.5);
         
         this.spawntomb = false;
         this.groundcollide = this.physics.add.collider(this.runner, this.ground);
@@ -250,7 +251,7 @@ class Play extends Phaser.Scene {
                 this.gun.setVelocityX(0);
                 this.gun.setX(700);
             }
-            if (this.upgrade == false && this.gun.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 75){
+            if (this.upgrade == false && this.gun.body.position.x > 640 && Phaser.Math.Between(1, 100000) <= 55){
                 this.gun.setVelocityX(-200);
             }
 
@@ -315,6 +316,8 @@ class Play extends Phaser.Scene {
                 this.runner.setVelocityY(-300);
                 this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', { font: '28px Press Start 2P', fill: '#ff0044'}).setOrigin(0.5);
                 this.add.text(game.config.width/2, game.config.height/2 + 32, 'Press (R) for menu', { font: '28px Press Start 2P', fill: '#ff0044' }).setOrigin(0.5);
+                this.add.text(game.config.width/2, game.config.height/2 + 64, 'Score: ' + parseInt(this.scorecounter/1000), { font: '28px Press Start 2P', fill: '#ff0044' }).setOrigin(0.5);
+
             }
             else {
                 this.sound.play('hit');

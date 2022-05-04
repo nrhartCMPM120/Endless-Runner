@@ -3,10 +3,14 @@ class Menu extends Phaser.Scene {
         super("menuScene");
     }
     preload(){
-        //this.load.audio('sfx_select', './assets/SFX1.wav');
+        this.load.audio('sfx_select', './assets/Playerdeathsfx.wav');
+        this.load.image('background', './assets/nightground.png');
     }
 
     create(){
+
+        this.add.tileSprite(0, 0, 640, 480, 'background').setOrigin(0, 0);
+
         let menuConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
@@ -29,7 +33,7 @@ class Menu extends Phaser.Scene {
 
     update(){
         if (Phaser.Input.Keyboard.JustDown(keyW)) {
-            //this.sound.play('sfx_select');
+            this.sound.play('sfx_select');
             this.scene.start('playScene');    
           }
     }
