@@ -2,6 +2,7 @@ class Menu extends Phaser.Scene {
     constructor() {
         super("menuScene");
     }
+    
     preload(){
         this.load.audio('sfx_select', './assets/Playerdeathsfx.wav');
         this.load.image('title', './assets/TitleScreen.png');
