@@ -30,7 +30,8 @@ class Play extends Phaser.Scene {
         //tomb
         this.load.spritesheet('tomb', './assets/tomb.png', {frameWidth: 48, frameHeight: 28});
         //runner
-        this.load.spritesheet('runner', './assets/runnerspritesheet.png', {frameWidth: 32, frameHeight: 64});
+        //this.load.spritesheet('runner', './assets/runnerspritesheet.png', {frameWidth: 32, frameHeight: 64});
+        this.load.atlas('runner_atlas', './assets/runnerspritesheet.png', './assets/runnermap.json');
         //ghost
         this.load.spritesheet('ghostcharge', './assets/ghostsprite.png', {frameWidth: 64, frameHeight: 32});
 
@@ -53,8 +54,8 @@ class Play extends Phaser.Scene {
         this.ground = this.physics.add.staticImage(400, 495, 'ground').setScale(2).refreshBody();
         this.groundScroll = this.add.tileSprite(0, game.config.height-95, game.config.width, 95, 'ground').setOrigin(0);
         
-        this.runner = this.physics.add.sprite(100, 300, 'runner').setSize(25, 50, true).setOffset(2, 10);
-        
+        //this.runner = this.physics.add.sprite(100, 300, 'runner').setSize(25, 50, true).setOffset(2, 10);
+        this.runner = this.physics.add.sprite(100, 300, 'runner').setSize(25, 50, true).setOffset(0, 0);
         //added sprites
         this.tomb = this.physics.add.sprite(700, 368, 'tomb');
         this.tomb.body.setAllowGravity(false);
@@ -91,11 +92,24 @@ class Play extends Phaser.Scene {
             repeat: -1
         });
         this.tomb.anims.play('move');
-
+/*
         this.anims.create({
             key: 'run',
             frames: this.anims.generateFrameNumbers('runner', {start: 0, end: 4, first: 0}),
             frameRate: 16,
+            repeat: -1
+        });
+*/
+        this.anims.create({
+            key: 'run',
+            frames: this.anims.generateFrameNames('runner_atlas', {
+                prefix: 'run_',
+                start: 1, 
+                end: 5,
+                suffix: '',
+                zeroPad: 4 
+            }),
+            frameRate: 24,
             repeat: -1
         });
 
